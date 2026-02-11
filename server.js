@@ -27,7 +27,7 @@ sequelize.authenticate().then(() => {
 app.use('/api', projectRoutes);
 
 // Démarrer le serveur
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3050;
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Serveur en cours d'exécution sur le port ${PORT}.`);
 });

@@ -61,7 +61,7 @@ Cela va :
 Testez l'API avec `curl` ou Postman :
 
 ```sh
-curl http://localhost:3000/api/
+curl http://localhost:3050/api/
 ```
 
 Vous devriez voir une réponse JSON.
