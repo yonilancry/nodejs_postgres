@@ -44,3 +44,4 @@ networks:
     driver: bridge
   web:
     external: true
+    name: app_web
