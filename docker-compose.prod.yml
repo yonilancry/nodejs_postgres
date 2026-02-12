@@ -14,19 +14,33 @@ services:
       - db_data:/var/lib/postgresql/data
       - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
     restart: unless-stopped
+    networks:
+      - internal
 
   node:
-    image: ${DOCKER_USERNAME:-votre_username}/nodejs_postgres:latest
+    image: ${DOCKER_USERNAME}/nodejs_postgres:latest
     container_name: yoni-nodejs_app
     depends_on:
       - db
-    ports:
-      - "3050:3050"
     environment:
       - DATABASE_URL=postgres://postgres:mysecretpassword@db:2345/mydb
       - NODE_ENV=production
     restart: unless-stopped
     command: ["node", "server.js"]
+    networks:
+      - internal
+      - web
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.nodejs.rule=Host(`yoni.soudry-ort.online`)"
+      - "traefik.http.routers.nodejs.entrypoints=web"
+      - "traefik.http.services.nodejs.loadbalancer.server.port=3050"
 
 volumes:
   db_data:
+
+networks:
+  internal:
+    driver: bridge
+  web:
+    external: true
