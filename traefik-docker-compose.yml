@@ -1,15 +1,13 @@
-version: "3.8"
-
 services:
   traefik:
     image: "traefik:v2.6"
-    container_name: "traefik"
+    container_name: "traefik-yoni"
     command:
       - "--api.insecure=true"
       - "--api.dashboard=true"
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
-      - "--providers.docker.network=traefik-net"
+      - "--providers.docker.network=yoni-traefik-net"
       - "--entrypoints.web.address=:80"
     ports:
       - "80:80"
@@ -22,5 +20,5 @@ services:
 
 networks:
   traefik-net:
-    name: traefik-net
+    name: yoni-traefik-net
     driver: bridge

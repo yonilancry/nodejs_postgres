@@ -35,7 +35,7 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SERVER_PORT }}
-          source: "docker-compose.prod.yml,traefik-docker-compose.yml,init-db.sql"
+          source: "docker-compose.prod.yml,init-db.sql"
           target: "~/app"
 
       - name: Deploy to Server
@@ -56,10 +56,8 @@ jobs:
             # Pull latest image
             docker pull ${{ secrets.DOCKER_USERNAME }}/nodejs_postgres:latest
 
-            # Start Traefik (creates the network) - only if not running
-            docker compose -f traefik-docker-compose.yml up -d
-
             # Deploy the app (with unique project name to avoid conflicts)
+            # Uses shared Traefik on network app_web
             docker compose -p ${{ secrets.DOCKER_USERNAME }} -f docker-compose.prod.yml down --remove-orphans
             docker compose -p ${{ secrets.DOCKER_USERNAME }} -f docker-compose.prod.yml up -d
 

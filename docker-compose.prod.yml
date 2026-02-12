@@ -40,3 +40,4 @@ networks:
     driver: bridge
   traefik-net:
     external: true
+    name: app_web
