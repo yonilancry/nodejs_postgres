@@ -75,7 +75,7 @@ L’application est configurée avec **Nodemon**, qui recharge automatiquement l
 Si vous modifiez un fichier, vérifiez les logs Docker :
 
 ```sh
-docker logs -f nodejs_app
+docker logs -f yoni-nodejs_app
 ```
 
 Si les changements ne sont pas pris en compte :

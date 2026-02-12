@@ -17,7 +17,7 @@ services:
 
   node:
     image: ${DOCKER_USERNAME:-votre_username}/nodejs_postgres:latest
-    container_name: nodejs_app
+    container_name: yoni-nodejs_app
     depends_on:
       - db
     ports:

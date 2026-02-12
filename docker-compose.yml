@@ -16,7 +16,7 @@ services:
 
   node:
     build: .
-    container_name: nodejs_app
+    container_name: yoni-nodejs_app
     depends_on:
       - db
     ports:
