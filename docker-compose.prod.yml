@@ -1,15 +1,11 @@
-version: '3'
-
 services:
   db:
     image: postgres:13
-    container_name: postgres_db_node
+    container_name: ${DOCKER_USERNAME}-postgres-db
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: mysecretpassword
       POSTGRES_DB: mydb
-    ports:
-      - "2345:2345"
     volumes:
       - db_data:/var/lib/postgresql/data
       - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
@@ -19,11 +15,11 @@ services:
 
   node:
     image: ${DOCKER_USERNAME}/nodejs_postgres:latest
-    container_name: real-yoni-nodejs_app
+    container_name: ${DOCKER_USERNAME}-nodejs-app
     depends_on:
       - db
     environment:
-      - DATABASE_URL=postgres://postgres:mysecretpassword@db:2345/mydb
+      - DATABASE_URL=postgres://postgres:mysecretpassword@db:5432/mydb
       - NODE_ENV=production
     restart: unless-stopped
     command: ["node", "server.js"]
@@ -32,9 +28,9 @@ services:
       - traefik-net
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.nodejs.rule=Host(`yoni.soudry-ort.online`)"
-      - "traefik.http.routers.nodejs.entrypoints=web"
-      - "traefik.http.services.nodejs.loadbalancer.server.port=3050"
+      - "traefik.http.routers.${DOCKER_USERNAME}-nodejs.rule=Host(`${DOMAIN}`)"
+      - "traefik.http.routers.${DOCKER_USERNAME}-nodejs.entrypoints=web"
+      - "traefik.http.services.${DOCKER_USERNAME}-nodejs.loadbalancer.server.port=3050"
 
 volumes:
   db_data:

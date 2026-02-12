@@ -48,17 +48,20 @@ jobs:
           script: |
             cd ~/app
 
+            # Variables d'environnement
             export DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}
+            export DOMAIN=${{ secrets.DOMAIN }}
+            export COMPOSE_PROJECT_NAME=${{ secrets.DOCKER_USERNAME }}
 
             # Pull latest image
             docker pull ${{ secrets.DOCKER_USERNAME }}/nodejs_postgres:latest
 
-            # Start Traefik (creates the network)
+            # Start Traefik (creates the network) - only if not running
             docker compose -f traefik-docker-compose.yml up -d
 
-            # Deploy the app
-            docker compose -f docker-compose.prod.yml down
-            docker compose -f docker-compose.prod.yml up -d
+            # Deploy the app (with unique project name to avoid conflicts)
+            docker compose -p ${{ secrets.DOCKER_USERNAME }} -f docker-compose.prod.yml down --remove-orphans
+            docker compose -p ${{ secrets.DOCKER_USERNAME }} -f docker-compose.prod.yml up -d
 
             # Cleanup
             docker image prune -f
