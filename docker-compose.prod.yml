@@ -29,7 +29,7 @@ services:
     command: ["node", "server.js"]
     networks:
       - internal
-      - web
+      - traefik-net
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.nodejs.rule=Host(`yoni.soudry-ort.online`)"
@@ -42,6 +42,5 @@ volumes:
 networks:
   internal:
     driver: bridge
-  web:
+  traefik-net:
     external: true
-    name: app_web

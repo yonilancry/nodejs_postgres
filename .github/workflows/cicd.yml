@@ -35,10 +35,9 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SERVER_PORT }}
-          source: "docker-compose.prod.yml,init-db.sql"
+          source: "docker-compose.prod.yml,traefik-docker-compose.yml,init-db.sql"
           target: "~/app"
 
-          # deployment
       - name: Deploy to Server
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -51,9 +50,15 @@ jobs:
 
             export DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}
 
+            # Pull latest image
             docker pull ${{ secrets.DOCKER_USERNAME }}/nodejs_postgres:latest
 
+            # Start Traefik (creates the network)
+            docker compose -f traefik-docker-compose.yml up -d
+
+            # Deploy the app
             docker compose -f docker-compose.prod.yml down
             docker compose -f docker-compose.prod.yml up -d
 
+            # Cleanup
             docker image prune -f
