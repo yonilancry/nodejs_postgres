@@ -19,7 +19,7 @@ services:
 
   node:
     image: ${DOCKER_USERNAME}/nodejs_postgres:latest
-    container_name: yoni-nodejs_app
+    container_name: real-yoni-nodejs_app
     depends_on:
       - db
     environment:
@@ -32,7 +32,7 @@ services:
       - web
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.nodejs.rule=Host(`yoni.soudry-ort.online`)"
+      - "traefik.http.routers.nodejs.rule=Host(`real-yoni.soudry-ort.online`)"
       - "traefik.http.routers.nodejs.entrypoints=web"
       - "traefik.http.services.nodejs.loadbalancer.server.port=3050"
 
